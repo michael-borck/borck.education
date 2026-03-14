@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "fetch-releases": "node scripts/fetch-releases.mjs",
+    "build": "node scripts/fetch-releases.mjs && astro build",
     "preview": "astro preview"
   },
   "dependencies": {

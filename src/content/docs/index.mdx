@@ -280,7 +280,6 @@ AI grading CLI — batch-grade with consistent rubric application.
   <a href="https://github.com/michael-borck/mark-mate">GitHub</a>
   <a href="https://pypi.org/project/mark-mate/">PyPI</a>
 </div>
-<div class="platform-downloads" data-repo="michael-borck/mark-mate"></div>
 </div>
 
 <div class="tool-card">
@@ -330,39 +329,25 @@ document.addEventListener('DOMContentLoaded', () => {
     linux: '<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12.5 2C10 2 8.2 4.1 8.2 7c0 1.3.4 2.8 1 4.2.4.9.6 1.5.5 2.3-.1.7-.5 1.4-1.4 2.5-1.3 1.6-1.6 2.8-1.3 3.7.2.6.7 1.1 1.5 1.5.7.3 1.6.5 2.5.6h2c.9-.1 1.8-.3 2.5-.6.8-.4 1.3-.9 1.5-1.5.3-.9 0-2.1-1.3-3.7-.9-1.1-1.3-1.8-1.4-2.5-.1-.8.1-1.4.5-2.3.6-1.4 1-2.9 1-4.2 0-2.9-1.8-5-4.3-5zm-4 17.5c-.5.7-.4 1.6.3 2.1.5.4 1.1.4 1.6.1l.5-.3c-.9-.2-1.7-.6-2.3-1.1l-.1.2zm8.1 0l-.1-.2c-.6.5-1.4.9-2.3 1.1l.5.3c.5.3 1.1.3 1.6-.1.7-.5.8-1.4.3-2.1z"/></svg>'
   };
 
-  // ── Fetch releases with caching ──
-  const cache = {};
-  async function getRelease(repo) {
-    if (cache[repo]) return cache[repo];
-    try {
-      const res = await fetch('https://api.github.com/repos/' + repo + '/releases/latest');
-      if (!res.ok) return null;
-      const data = await res.json();
-      cache[repo] = data;
-      return data;
-    } catch (e) { return null; }
-  }
-
-  // ── Deduplicate repos and batch fetch ──
+  // ── Load pre-fetched release data (built at deploy time) ──
   const els = document.querySelectorAll('.platform-downloads');
-  const repos = [...new Set(Array.from(els).map(el => el.dataset.repo).filter(Boolean))];
-
-  Promise.all(repos.map(r => getRelease(r))).then(() => {
-    els.forEach(el => {
-      const repo = el.dataset.repo;
-      if (!repo || !cache[repo]) return;
-      const assets = cache[repo].assets || [];
-      const win = assets.find(a => /setup.*\\.exe$/i.test(a.name)) || assets.find(a => /\\.exe$/i.test(a.name)) || assets.find(a => /\\.msi$/i.test(a.name));
-      const mac = assets.find(a => /arm64.*\\.dmg$/i.test(a.name)) || assets.find(a => /\\.dmg$/i.test(a.name));
-      const linux = assets.find(a => /\\.AppImage$/i.test(a.name)) || assets.find(a => /\\.deb$/i.test(a.name));
-      if (!win && !mac && !linux) return;
-      let html = '';
-      if (win) html += '<a href="' + win.browser_download_url + '" class="dl-icon" title="Download for Windows">' + icons.win + '</a>';
-      if (mac) html += '<a href="' + mac.browser_download_url + '" class="dl-icon" title="Download for macOS">' + icons.mac + '</a>';
-      if (linux) html += '<a href="' + linux.browser_download_url + '" class="dl-icon" title="Download for Linux">' + icons.linux + '</a>';
-      el.innerHTML = html;
-    });
-  });
+  if (els.length) {
+    fetch('/releases.json')
+      .then(r => r.ok ? r.json() : {})
+      .then(releases => {
+        els.forEach(el => {
+          const repo = el.dataset.repo;
+          if (!repo || !releases[repo]) return;
+          const r = releases[repo];
+          let html = '';
+          if (r.win) html += '<a href="' + r.win + '" class="dl-icon" title="Download for Windows">' + icons.win + '</a>';
+          if (r.mac) html += '<a href="' + r.mac + '" class="dl-icon" title="Download for macOS">' + icons.mac + '</a>';
+          if (r.linux) html += '<a href="' + r.linux + '" class="dl-icon" title="Download for Linux">' + icons.linux + '</a>';
+          el.innerHTML = html;
+        });
+      })
+      .catch(() => {});
+  }
 
   // ── Carousel dots ──
   const carousel = document.querySelector('.carousel');

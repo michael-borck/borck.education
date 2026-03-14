@@ -7,6 +7,9 @@ export default defineConfig({
     starlight({
       title: 'borck.education',
       favicon: '/favicon.svg',
+      logo: {
+        src: './src/assets/logo.svg',
+      },
       description: 'AI-powered tools for educators',
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/michael-borck' },

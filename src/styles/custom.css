@@ -76,6 +76,25 @@ code {
   letter-spacing: -0.02em;
 }
 
+.hero-logo {
+  display: inline-block;
+  width: 3.2rem;
+  height: 3.2rem;
+  vertical-align: -0.3rem;
+  margin-right: 0.5rem;
+  border-radius: 8px;
+}
+
+@media (max-width: 640px) {
+  .hero-logo {
+    width: 2.2rem;
+    height: 2.2rem;
+    vertical-align: -0.25rem;
+    margin-right: 0.35rem;
+    border-radius: 6px;
+  }
+}
+
 .landing-hero h1 .first-name {
   color: var(--sl-color-white);
 }

@@ -5,7 +5,7 @@ export default defineConfig({
   site: 'https://borck.education',
   integrations: [
     starlight({
-      title: 'Borck Education',
+      title: 'borck.education',
       favicon: '/favicon.svg',
       description: 'AI-powered tools for educators',
       social: [

@@ -8,7 +8,8 @@ export default defineConfig({
       title: 'borck.education',
       favicon: '/favicon.svg',
       logo: {
-        src: './src/assets/logo.svg',
+        src: './src/assets/logo-title.svg',
+        replacesTitle: true,
       },
       description: 'AI-powered tools for educators',
       social: [

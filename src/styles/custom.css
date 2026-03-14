@@ -353,22 +353,6 @@ code {
   margin-bottom: 1rem;
 }
 
-/* ── Nav bar title colouring ── */
-.site-title span {
-  background: linear-gradient(
-    90deg,
-    var(--sl-color-white) 0%,
-    var(--sl-color-white) 38%,
-    var(--sl-color-gray-2) 38%,
-    var(--sl-color-gray-2) 42%,
-    var(--sl-color-accent) 42%,
-    var(--sl-color-accent) 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
 /* ── Hide Starlight's default hero since we use a custom one ── */
 .hero {
   display: none !important;

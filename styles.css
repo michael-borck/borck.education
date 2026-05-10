@@ -88,13 +88,8 @@ header nav a.nav-link:hover { color: var(--white); text-decoration: none; }
   border: 1px solid var(--gray-4);
   border-radius: var(--radius);
   padding: 1.75rem;
-  transition: border-color 0.15s, transform 0.15s;
   display: flex;
   flex-direction: column;
-}
-.card:hover {
-  border-color: var(--accent);
-  transform: translateY(-2px);
 }
 .card h3 {
   font-size: 1.25rem;
